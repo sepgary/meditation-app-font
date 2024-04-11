@@ -3,43 +3,64 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "首页"
+				"navigationBarTitleText": "首页",
+				"enablePullDownRefresh" : true
 			}
 		},
 		{
 			"path": "pages/found/course",
 			"style": {
-				"navigationBarTitleText": "课程发现页"
+				"navigationBarTitleText": "课程发现页",
+				"enablePullDownRefresh" : true
 			}
 		},
 		{
 			"path": "pages/found/voice",
 			"style": {
-				"navigationBarTitleText": "音频发现页"
+				"navigationBarTitleText": "音频发现页",
+				"enablePullDownRefresh" : true
 			}
 		},
 		{
 			"path": "pages/list/list",
 			"style": {
-				"navigationBarTitleText": "列表页"
+				"navigationBarTitleText": "列表页",
+				"enablePullDownRefresh" : true
 			}
 		},
 		{
 			"path": "pages/audio/audio",
 			"style": {
-				"navigationBarTitleText": "音频详情"
+				"navigationBarTitleText": "音频详情",
+				"enablePullDownRefresh" : false
 			}
 		},
 		{
 			"path": "pages/personal/personal",
 			"style": {
-				"navigationBarTitleText": "个人详情"
+				"navigationBarTitleText": "个人详情",
+				"enablePullDownRefresh" : false
 			}
 		},
 		{
 			"path": "pages/personal/love",
 			"style": {
-				"navigationBarTitleText": "我的收藏"
+				"navigationBarTitleText": "我的收藏",
+				"enablePullDownRefresh" : true
+			}
+		},
+		{
+			"path": "pages/personal/record",
+			"style": {
+				"navigationBarTitleText": "历史记录",
+				"enablePullDownRefresh" : true
+			}
+		},
+		{
+			"path" : "pages/personal/edit",
+			"style" : {
+				"navigationBarTitleText" : "用户编辑",
+				"enablePullDownRefresh" : false
 			}
 		}
     ],
