@@ -28,8 +28,8 @@
             return {
                 // 基础表单数据
                 baseFormData: {
-					phone: "",
-					code: ""
+					phone: '',
+					code: ''
                 }
             }
         },
@@ -48,7 +48,9 @@
         },
 		onLoad() {
 			request("/base/launch",'GET').then(res=>{
-			    console.log(res)
+				if (res.data.data.token != null && res.data.data.token != '') {
+					uni.setStorageSync('token', res.data.data.token)
+				}
 			}).catch(err=>{
 			    console.log(err)
 			})

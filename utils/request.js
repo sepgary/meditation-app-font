@@ -15,14 +15,14 @@ export const request = (url,method,data) =>{
             data: data,
             method: method,
             header: {
-                'content-type': 'multipart/form-data; boundary=--------------------------872308430855378440992650',
+                'content-type': 'application/x-www-form-urlencoded',
 				'x-app-id': '10023',
-				'x-token': uni.getStorageSync('token'),
+				'x-token': uni.getStorageSync('token') == null ? '' : uni.getStorageSync('token'),
 				'x-version': uni.getStorageSync('appVersion'),
 				'x-platform': uni.getStorageSync('platform'),
 				'x-device-id': uni.getStorageSync('deviceId'),
 				'x-mobile-brand': uni.getStorageSync('brand'),
-				'x-mobile-model': uni.getStorageSync('model')
+				'x-mobile-model': uni.getStorageSync('model'),
             },
             success: (res) => {
                 resolve(res)
