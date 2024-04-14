@@ -35,6 +35,20 @@
         },
         methods: {
             submit() {
+				request("/user/login/phone", 'POST', {
+					phone: this.baseFormData.phone,
+					code: this.baseFormData.code
+				}).then(res=>{
+					console.log(res)
+					// 赋值 token
+					uni.setStorageSync('token', res.data.token)
+					// 跳转到首页
+					uni.switchTab({
+						url:"/pages/index/index"
+					})
+				}).catch(err=>{
+					console.log(err)
+				})
             },
 			sendCode() {
 				request("/user/code",'POST',{
