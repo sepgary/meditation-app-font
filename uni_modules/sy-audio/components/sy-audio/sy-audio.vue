@@ -21,8 +21,8 @@
 <script>
 	let timer;
 	export default {
-		name:'syAudio',
-		emits: ['audioPlay', 'audioPause','audioEnd','audioCanplay','change'],
+		name: 'syAudio',
+		emits: ['audioPlay', 'audioPause', 'audioEnd', 'audioCanplay', 'change'],
 		data() {
 			return {
 				audio_status: false,
@@ -36,7 +36,7 @@
 				stringObject: (data) => {
 					return typeof(data)
 				},
-				innerAudioContext:uni.createInnerAudioContext()
+				innerAudioContext: uni.createInnerAudioContext()
 			}
 		},
 		props: {
@@ -84,6 +84,14 @@
 			backgroundColor: {
 				type: String,
 				default: '#f1c38b'
+			}
+		},
+		watch: {
+			src: {
+				handler: function(newVal, oldVal) {
+					this.innerAudioContext.src = typeof(newVal) == 'string' ? newVal : newVal;
+				},
+				deep: true
 			}
 		},
 		async mounted() {
@@ -136,36 +144,41 @@
 				this.maxSliderIndex = parseFloat(this.innerAudioContext.duration).toFixed(2);
 				// #endif
 			});
-			
-			this.innerAudioContext.onPlay(()=>{
-				this.$emit('change',{state:true});
+
+			this.innerAudioContext.onPlay(() => {
+				this.$emit('change', {
+					state: true
+				});
 			});
-			
-			this.innerAudioContext.onPause(()=>{
-				this.$emit('change',{state:false});
+
+			this.innerAudioContext.onPause(() => {
+				this.$emit('change', {
+					state: false
+				});
 			});
 		},
 		methods: {
 			//销毁innerAudioContext()实例
-			audioDestroy(){
+			audioDestroy() {
 				if (this.innerAudioContext) {
 					this.innerAudioContext.destroy();
 					this.audio_status = false;
 				}
 			},
 			//跳转到指定位置
-			audioSeek(value){
+			audioSeek(value) {
 				this.sliderChange(value)
 			},
 			//控制音乐播放/暂停
-			audioPause(){
+			audioPause() {
 				this.clickAudio()
 			},
 			countDown() {
 				timer = setInterval(() => {
 					this.sliderIndex = parseFloat(this.innerAudioContext.currentTime).toFixed(2);
 
-					this.timeTxt = this.getTime(this.isCountDown ? this.innerAudioContext.duration - this.innerAudioContext
+					this.timeTxt = this.getTime(this.isCountDown ? this.innerAudioContext.duration - this
+						.innerAudioContext
 						.currentTime : this.innerAudioContext.currentTime);
 					this.timeTxt = this.isCountDown ? '- ' + this.timeTxt : this.timeTxt;
 
@@ -175,6 +188,7 @@
 				}, 100)
 			},
 			clickAudio() {
+
 				if (this.audio_status && !this.innerAudioContext.paused) {
 					this.innerAudioContext.pause();
 					clearInterval(timer);

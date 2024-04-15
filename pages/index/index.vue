@@ -7,43 +7,24 @@
 			</view>
 			<view class="uni-margin-wrap">
 				<swiper class="swiper" :circular="circular" :indicator-dots="indicatorDots" :autoplay="autoplay">
-					<swiper-item>
+					<swiper-item v-for="(item, index) in indexCourseVoiceList">
 						<view class="card-all">
 							<view class="card-top flex-item">
 								<view class="uni-flex uni-row" style="justify-content: space-between;">
 									<view class="text">第一天</view>
-									<uni-icons type="checkbox-filled" size="26"/>
+									<uni-icons v-if="item.isSuccess" type="checkbox-filled" size="26"/>
+									<uni-icons v-if="!item.isSuccess" type="checkbox" size="26"/>
 								</view>
 							</view>
-							<view class="card-middle flex-item">21天正念辛福课</view>
+							<view class="card-middle flex-item">{{indexCourseMain.courseName}}</view>
 							<view class="card-bottom flex-item ">
 								<view class="uni-flex uni-row">
-									<view class="text" style="-webkit-flex: 1;flex: 1;">正念冥想初体验</view>
-									<view class="text" style="-webkit-flex: 1;flex: 1; text-align: right;">10分钟</view>
+									<view class="text" style="-webkit-flex: 1;flex: 1;">{{item.voiceName}}</view>
+									<view class="text" style="-webkit-flex: 1;flex: 1; text-align: right;">{{parseInt(item.duration / 60)}}分钟</view>
 								</view>
 							</view>
-							<view class="card-button flex-item">
-								<button type="primary" plain="true">重播</button>
-							</view>
-						</view>
-					</swiper-item>
-					<swiper-item>
-						<view class="card-all">
-							<view class="card-top flex-item">
-								<view class="uni-flex uni-row" style="justify-content: space-between;">
-									<view class="text">第二天</view>
-									<uni-icons type="checkbox" size="26"/>
-								</view>
-							</view>
-							<view class="card-middle flex-item">21天正念辛福课</view>
-							<view class="card-bottom flex-item ">
-								<view class="uni-flex uni-row">
-									<view class="text" style="-webkit-flex: 1;flex: 1;">正念冥想初体验</view>
-									<view class="text" style="-webkit-flex: 1;flex: 1; text-align: right;">8分钟</view>
-								</view>
-							</view>
-							<view class="card-button flex-item">
-								<button type="primary" plain="true">重播</button>
+							<view class="card-button flex-item" @click="gotoVoiceMain(item.id)">
+								<button type="primary" plain="true">{{indexCourseMain.isSuccess ? "重播" : "开始"}}</button>
 							</view>
 						</view>
 					</swiper-item>
@@ -74,16 +55,42 @@
 	</view>
 </template>
 <script>
+	import request from '@/utils/request'
 	export default {
 		data() {
 			return {
 				indicatorDots: false,
 				autoplay: false,
 				circular: false,
-				ImageSrc: "./static/logo/png"
+				indexCourseMain: {},
+				indexCourseVoiceList: []
 			}
 		},
 		methods: {
+			loadIndexCourse() {
+				// 获取系统配置课程
+				let indexCourseId = uni.getStorageSync('config')['server.course.id']
+				request("/course/get/" + indexCourseId, 'GET').then(res=>{
+					console.log(res)
+					this.indexCourseMain = res.data.data
+					for (let i = 0; i < res.data.data.voices.length; i ++) {
+						this.indexCourseVoiceList.push(res.data.data.voices[i])
+						if (!res.data.data.voices[i].isSuccess) {
+							break;
+						}
+					}
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
+			gotoVoiceMain(voiceId) {
+				uni.navigateTo({
+					url: '../audio/audio?voiceId=' + voiceId,
+				});
+			}
+		},
+		onShow() {
+			this.loadIndexCourse()
 		}
 	}
 </script>

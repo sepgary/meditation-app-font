@@ -1,12 +1,12 @@
 {
   "id": "sy-audio",
   "displayName": "sy-audio",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "sy-audio基于uni.createInnerAudioContext()方法搭建，并支持全端环境；",
   "keywords": [
     "audio",
     "播放器",
-    "createInnerAudioContext",
+    "createInnerAudio",
     "音乐播放器",
     "音频倍速播放"
 ],

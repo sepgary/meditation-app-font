@@ -34,6 +34,19 @@
             }
         },
         methods: {
+			launch() {
+				request("/base/launch",'GET').then(res=>{
+					uni.setStorageSync("config", res.data.data.config)
+					uni.setStorageSync("userId", res.data.data.userId)
+					uni.setStorageSync("hashId", res.data.data.uhashId)
+					uni.setStorageSync("guest", res.data.data.uguest)
+					if (res.data.data.token != null && res.data.data.token != '') {
+						uni.setStorageSync('token', res.data.data.token)
+					}
+				}).catch(err=>{
+				    console.log(err)
+				})
+			},
             submit() {
 				request("/user/login/phone", 'POST', {
 					phone: this.baseFormData.phone,
@@ -42,6 +55,8 @@
 					console.log(res)
 					// 赋值 token
 					uni.setStorageSync('token', res.data.token)
+					// reLaunch
+					this.launch()
 					// 跳转到首页
 					uni.switchTab({
 						url:"/pages/index/index"
@@ -60,14 +75,8 @@
 				})
 			}
         },
-		onLoad() {
-			request("/base/launch",'GET').then(res=>{
-				if (res.data.data.token != null && res.data.data.token != '') {
-					uni.setStorageSync('token', res.data.data.token)
-				}
-			}).catch(err=>{
-			    console.log(err)
-			})
+		onShow() {
+			this.launch()
 		}
     }
 </script>
