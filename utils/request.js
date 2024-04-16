@@ -1,5 +1,5 @@
 const baseUrl = 'http://localhost:9284/api'    //api的固定前部地址
-export const request = (url,method,data) =>{
+export const request = (url,method,data,contentTypeChoice) =>{
     return new Promise((resolve,reject) =>{
 		uni.getSystemInfo({
 			success: function (res) {
@@ -10,12 +10,16 @@ export const request = (url,method,data) =>{
 				uni.setStorageSync('model', res.model)
 			}
 		})
+		let contentType = 'application/x-www-form-urlencoded'
+		if (contentTypeChoice == 1) {
+			contentType = 'application/json'
+		}
         uni.request({
             url: baseUrl + url,//拼接请求路径
             data: data,
             method: method,
             header: {
-                'content-type': 'application/x-www-form-urlencoded',
+                'content-type': contentType,
 				'x-app-id': '10023',
 				'x-token': uni.getStorageSync('token') == null ? '' : uni.getStorageSync('token'),
 				'x-version': uni.getStorageSync('appVersion'),

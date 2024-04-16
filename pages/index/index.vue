@@ -11,12 +11,12 @@
 						<view class="card-all">
 							<view class="card-top flex-item">
 								<view class="uni-flex uni-row" style="justify-content: space-between;">
-									<view class="text">第一天</view>
+									<view class="text">第{{index + 1}}天</view>
 									<uni-icons v-if="item.isSuccess" type="checkbox-filled" size="26"/>
 									<uni-icons v-if="!item.isSuccess" type="checkbox" size="26"/>
 								</view>
 							</view>
-							<view class="card-middle flex-item">{{indexCourseMain.courseName}}</view>
+							<view class="card-middle flex-item"></view>
 							<view class="card-bottom flex-item ">
 								<view class="uni-flex uni-row">
 									<view class="text" style="-webkit-flex: 1;flex: 1;">{{item.voiceName}}</view>
@@ -24,7 +24,7 @@
 								</view>
 							</view>
 							<view class="card-button flex-item" @click="gotoVoiceMain(item.id)">
-								<button type="primary" plain="true">{{indexCourseMain.isSuccess ? "重播" : "开始"}}</button>
+								<button type="primary" plain="true">{{item.isSuccess ? "重播" : "开始"}}</button>
 							</view>
 						</view>
 					</swiper-item>
@@ -37,17 +37,9 @@
 			</view>
 			<view>
 				<scroll-view class="scroll-view_H" scroll-x="true" scroll-left="120">
-					<view class="scroll-view-item_H">
-						<image class="image" mode="scaleToFill" src="https://web-assets.dcloud.net.cn/unidoc/zh/uni@2x.png" />
-						<view class="text">基础冥想</view>
-					</view>
-					<view class="scroll-view-item_H">
-						<image class="image" mode="scaleToFill" src="https://web-assets.dcloud.net.cn/unidoc/zh/uni@2x.png" />
-						<view class="text">正念冥想</view>
-					</view>
-					<view class="scroll-view-item_H">
-						<image class="image" mode="scaleToFill" src="https://web-assets.dcloud.net.cn/unidoc/zh/uni@2x.png" />
-						<view class="text">xxxxx</view>
+					<view v-for="(item, index) in recommendVoiceList" class="scroll-view-item_H">
+						<image class="image" mode="scaleToFill" :src="item.picture" />
+						<view class="text">{{item.voiceName}}</view>
 					</view>
 				</scroll-view>
 			</view>
@@ -63,11 +55,13 @@
 				autoplay: false,
 				circular: false,
 				indexCourseMain: {},
-				indexCourseVoiceList: []
+				indexCourseVoiceList: [],
+				recommendVoiceList: []
 			}
 		},
 		methods: {
 			loadIndexCourse() {
+				this.indexCourseVoiceList = []
 				// 获取系统配置课程
 				let indexCourseId = uni.getStorageSync('config')['server.course.id']
 				request("/course/get/" + indexCourseId, 'GET').then(res=>{
@@ -87,10 +81,19 @@
 				uni.navigateTo({
 					url: '../audio/audio?voiceId=' + voiceId,
 				});
+			},
+			loadRecommendVoiceList() {
+				request("/voice/recommend", 'GET').then(res=>{
+					console.log(res)
+					this.recommendVoiceList = res.data.data
+				}).catch(err=>{
+					console.log(err)
+				})
 			}
 		},
 		onShow() {
 			this.loadIndexCourse()
+			this.loadRecommendVoiceList()
 		}
 	}
 </script>

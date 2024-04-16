@@ -33,7 +33,7 @@
 				userStatisticsRequest.day = String(now.getDate()).padStart(2, '0')
 				userStatisticsRequest.month = String(now.getMonth() + 1).padStart(2, '0')
 				userStatisticsRequest.year = now.getFullYear()
-				request("/user/statistics", 'POST', userStatisticsRequest).then(res=>{
+				request("/user/statistics", 'POST', userStatisticsRequest, 1).then(res=>{
 					console.log(res)
 				}).catch(err=>{
 					console.log(err)
