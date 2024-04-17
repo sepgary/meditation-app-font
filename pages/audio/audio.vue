@@ -5,8 +5,8 @@
 			@audioPlay="audioPlay()"
 			@audioPause="audioPause()"
 		/>
-		<button v-if="voiceMain.isLike" type="warn">取消收藏</button>
-		<button v-if="!voiceMain.isLike" type="primary">收藏</button>
+		<button v-if="voiceMain.isLike" type="warn" @click="loveVoice(voiceMain.id)">取消收藏</button>
+		<button v-if="!voiceMain.isLike" type="primary" @click="loveVoice(voiceMain.id)">收藏</button>
 	</view>
 </template>
 <script>
@@ -57,6 +57,15 @@
 				request("/voice/get/" + voiceId, 'GET').then(res=>{
 					console.log(res)
 					this.voiceMain = res.data.data
+				}).catch(err=>{
+					console.log(err)
+				})
+			},
+			loveVoice(voiceId) {
+				let i = 1
+				request("/voice/like/" + voiceId, 'GET').then(res=>{
+					console.log(res)
+					this.loadVoice()
 				}).catch(err=>{
 					console.log(err)
 				})

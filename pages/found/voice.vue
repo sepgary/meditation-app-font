@@ -6,20 +6,18 @@
 		<uni-search-bar @confirm="search" :focus="true" v-model="searchValue" @blur="blur" @focus="focus" @input="input"
 			@cancel="cancel" @clear="clear">
 		</uni-search-bar>
-		<uni-section title="最近新上" type="line" titleFontSize="large" titleColor="#5da981">
+		<uni-section v-for="(typeItem, index) in typeAndVoiceList" :title="typeItem.typeName" type="line" titleFontSize="large" titleColor="#5da981">
 			<template v-slot:right>
-				<navigator url="/pages/list/list?isCourse=false" hover-class="navigator-hover">
-					<text>更多 ></text>
+				<navigator url="/pages/list/list?isCourse=true" hover-class="navigator-hover">
+					<text>全部 ></text>
 				</navigator>
 			</template>
 			<view>
-				<scroll-view class="scroll-view_H" scroll-x="true" scroll-left="120">
-					<navigator url="/pages/audio/audio" hover-class="navigator-hover">
-						<view class="scroll-view-item_H">
-							<image class="image" mode="scaleToFill" src="https://web-assets.dcloud.net.cn/unidoc/zh/uni@2x.png" />
-							<view class="text">基础冥想</view>
-						</view>
-					</navigator>
+				<scroll-view class="scroll-view_H" scroll-x="true" scroll-left="120" @touchmove.stop>
+					<view v-for="(voiceItem, index) in typeItem.voices" class="scroll-view-item_H">
+						<image class="image" mode="scaleToFill" :src="voiceItem.picture" />
+						<view class="text">{{voiceItem.voiceName}}</view>
+					</view>
 				</scroll-view>
 			</view>
 		</uni-section>
@@ -27,10 +25,12 @@
 </template>
 
 <script>
+	import request from '@/utils/request'
 	export default {
 		data() {
 			return {
-				searchValue: '123123'
+				searchValue: '123123',
+				typeAndVoiceList: []
 			}
 		},
 		methods: {
@@ -45,7 +45,18 @@
 			focus(e) {
 			},
 			cancel(res) {
+			},
+			loadCourseData() {
+				request("/voice/list/5",'GET').then(res=>{
+					console.log(res)
+					this.typeAndVoiceList = res.data.data
+				}).catch(err=>{
+				    console.log(err)
+				})
 			}
+		},
+		onShow() {
+			this.loadCourseData()
 		}
 	}
 </script>

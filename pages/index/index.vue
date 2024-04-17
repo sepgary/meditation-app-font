@@ -38,7 +38,7 @@
 			<view>
 				<scroll-view class="scroll-view_H" scroll-x="true" scroll-left="120">
 					<view v-for="(item, index) in recommendVoiceList" class="scroll-view-item_H">
-						<image class="image" mode="scaleToFill" :src="item.picture" />
+						<image class="image" mode="scaleToFill" :src="item.picture" @click="gotoVoiceMain(item.id)" />
 						<view class="text">{{item.voiceName}}</view>
 					</view>
 				</scroll-view>

@@ -5,7 +5,7 @@
 	<uni-list>
 		<uni-list-item v-for="(item, index) in voiceList" :title="item.voiceName" 
 		:note="item.gmtCreate" :thumb="item.picture"
-			thumb-size="lg" :rightText="item.duration" link to="/pages/vue/index/index"/>
+			thumb-size="lg" :rightText="item.duration" link to=""  @click="gotoVoiceMain(item.id)"/>
 	</uni-list>
 </template>
 
@@ -37,7 +37,12 @@
 				}).catch(err=>{
 					console.log(err)
 				})
-			}
+			},
+			gotoVoiceMain(voiceId) {
+				uni.navigateTo({
+					url: '../audio/audio?voiceId=' + voiceId,
+				});
+			},
         },
 		onPageScroll() {
 			this.loadVoiceList()
