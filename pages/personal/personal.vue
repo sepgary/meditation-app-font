@@ -5,8 +5,8 @@
 			</view>
 		<navigator url="/pages/personal/edit">
 		<view>
-			<view class="name">hello</view>
-			<view class="des" style="margin-left: 50rpx; margin-top: 10rpx;">学习冥想的第29天</view>
+			<view class="name">{{userInfo.name}}</view>
+			<view class="des" style="margin-left: 50rpx; margin-top: 10rpx;">学习冥想的第{{userInfo.liveDay}}天</view>
 		</view>
 		</navigator>
 	  </view>
@@ -18,15 +18,15 @@
 	<uni-list>
 		 <view class="uni-flex uni-row memstatic" style="padding-top: 30rpx;">
 			<view class="text" style="-webkit-flex: 1;flex: 1;">
-				<view class="number">24</view>
+				<view class="number">{{parseInt(userInfo.todayVoiceTime / 60)}}</view>
 				<view class="des">今日冥想 (分钟)</view>
 			</view>
 			<view class="text" style="-webkit-flex: 1;flex: 1;">
-				<view class="number">344</view>
+				<view class="number">{{userInfo.signAllCount}}</view>
 				<view class="des">积累 (天数)</view>
 			</view>
 			<view class="text" style="-webkit-flex: 1;flex: 1;">
-				<view class="number">23</view>
+				<view class="number">{{userInfo.signCount}}</view>
 				<view class="des">连续 (天数)</view>
 			</view>
 		 </view>
@@ -34,16 +34,16 @@
 	<uni-list>
 		 <view class="uni-flex uni-row memstatic" style="padding-top: 30rpx;">
 		 	<view class="text" style="-webkit-flex: 1;flex: 1;">
-		 		<view class="number">24</view>
-				<view class="des">本周冥想 (分钟)</view>
-		 	</view>
-		 	<view class="text" style="-webkit-flex: 1;flex: 1;">
-		 		<view class="number">344</view>
+		 		<view class="number">{{parseInt(userInfo.monthVoiceTime / 60)}}</view>
 		 		<view class="des">本月冥想 (分钟)</view>
 		 	</view>
 		 	<view class="text" style="-webkit-flex: 1;flex: 1;">
-		 		<view class="number">23</view>
+		 		<view class="number">{{parseInt(userInfo.yearVoiceTime / 60)}}</view>
 		 		<view class="des">本年冥想 (分钟)</view>
+		 	</view>
+		 	<view class="text" style="-webkit-flex: 1;flex: 1;">
+		 		<view class="number">{{parseInt(userInfo.allVoiceTime / 60)}}</view>
+				<view class="des">累计冥想 (分钟)</view>
 		 	</view>
 		 </view>
 	</uni-list>
@@ -64,16 +64,28 @@
 </template>
 
 <script>
+	import request from '@/utils/request'
     export default {
         data() {
             return {
+				userInfo: {}
             };
         },
 		onLoad () {
 		},
         methods: {
-			
-        }
+			loadUserInfo() {
+				request("/user/get", 'GET').then(res=>{
+					console.log(res)
+					this.userInfo = res.data.data
+				}).catch(err=>{
+					console.log(err)
+				})
+			}
+        },
+		onShow() {
+			this.loadUserInfo()
+		}
     }
 </script>
 <style lang="scss">

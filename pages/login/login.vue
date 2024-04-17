@@ -54,7 +54,7 @@
 				}).then(res=>{
 					console.log(res)
 					// 赋值 token
-					uni.setStorageSync('token', res.data.token)
+					uni.setStorageSync('token', res.data.data.token)
 					// reLaunch
 					this.launch()
 					// 跳转到首页

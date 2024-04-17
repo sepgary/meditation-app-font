@@ -5,6 +5,8 @@
 			@audioPlay="audioPlay()"
 			@audioPause="audioPause()"
 		/>
+		<button v-if="voiceMain.isLike" type="warn">取消收藏</button>
+		<button v-if="!voiceMain.isLike" type="primary">收藏</button>
 	</view>
 </template>
 <script>

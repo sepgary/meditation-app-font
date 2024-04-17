@@ -3,26 +3,50 @@
 		<view class="text">我的收藏</view>
 	</view>
 	<uni-list>
-		<uni-list-item title="冥想冥想" note="2024/04/11" thumb="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
-			thumb-size="lg" rightText="12:23" link to="/pages/vue/index/index"/>
-		<uni-list-item title="冥想冥想" note="2024/04/11" thumb="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
-			thumb-size="lg" rightText="12:23" link to="/pages/vue/index/index"/>
-		<uni-list-item title="冥想冥想" note="2024/04/11" thumb="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
-			thumb-size="lg" rightText="12:23" link to="/pages/vue/index/index"/>
+		<uni-list-item v-for="(item, index) in voiceList" :title="item.voiceName" 
+		:note="item.gmtCreate" :thumb="item.picture"
+			thumb-size="lg" :rightText="item.duration" link to="/pages/vue/index/index"/>
 	</uni-list>
 </template>
 
 <script>
+	import request from '@/utils/request'
     export default {
         data() {
             return {
+				page: 1,
+				voiceList: []
             };
         },
 		onLoad () {
 		},
         methods: {
-			
-        }
+			loadVoiceList() {
+				request("/user/likes?page=" + this.page + "&size=5", 'GET').then(res=>{
+					console.log(res)
+					for (let i = 0; i < res.data.data.length; i ++) {
+						// 格式化日期
+						res.data.data[i].gmtCreate = res.data.data[i].gmtCreate.substring(0, 10)
+						// 格式化时长
+						res.data.data[i].duration = parseInt(res.data.data[i].duration / 60) + ":" + parseInt(res.data.data[i].duration % 60)
+						this.voiceList.push(res.data.data[i])
+					}
+					if (res.data.data.length > 0) {
+						this.page ++
+					}
+				}).catch(err=>{
+					console.log(err)
+				})
+			}
+        },
+		onPageScroll() {
+			this.loadVoiceList()
+		},
+		onShow() {
+			this.voiceList = []
+			this.page = 1
+			this.loadVoiceList()
+		}
     }
 </script>
 <style lang="scss">
