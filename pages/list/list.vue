@@ -1,40 +1,71 @@
 <template>
 	<view>
 		<view class="index-title">
-			<view class="text">冥想入门</view>
+			<view v-if="isCourse" class="text">{{courseMain.courseName}}</view>
+			<view v-if="!isCourse" class="text">{{typeMain.typeName}}</view>
 		</view>
-		<uni-card v-if="isCourse" title="冥想入门" extra="13章节">
-			<text class="uni-body">冥想(meditation)是一种意识状态,可以通过某些特定的技术实现,包括专注呼吸、静坐冥想、动态冥想等。冥想可以帮助人们降低压力、缓解焦虑、增强身心健康和调整内心平衡。在冥想状态下，人们尝试专注于当下的感受和情感,减少对过去、未来的关注，从而放松身心，提升自我意识和内在智翘。</text>
+		<uni-card v-if="isCourse" :title="courseMain.courseName" :extra="voices.length + '章节'">
+			<text class="uni-body">{{courseMain.courseMain}}</text>
 		</uni-card>
 		<uni-list>
-			<uni-list-item title="01 放下所有" showArrow
-				thumb="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
-				thumb-size="lg" rightText="09:00" />
-			<uni-list-item title="01 放下所有" showArrow
-				thumb="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
-				thumb-size="lg" rightText="09:00" />
-			<uni-list-item title="01 放下所有" showArrow
-				thumb="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
-				thumb-size="lg" rightText="09:00" />
-			<uni-list-item title="01 放下所有" showArrow
-				thumb="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
-				thumb-size="lg" rightText="09:00" />
+			<uni-list-item v-for="(item,index) in voices" :title="item.voiceName" showArrow
+				:thumb="item.picture"
+				thumb-size="lg" :rightText="item.duration" />
 		</uni-list>
 	</view>
 </template>
 
 <script>
+	import request from '@/utils/request'
     export default {
         data() {
             return {
-                isCourse: false
+                isCourse: false,
+				dataId: 0,
+				courseMain: {},
+				typeMain: {},
+				voices: []
             };
         },
-		onLoad () {
-			this.isCourse = this.$route.query.isCourse === 'true'
-		},
         methods: {
-        }
+			loadCourseData() {
+				request("/course/get/" + this.dataId,'GET').then(res=>{
+					console.log(res)
+					this.courseMain = res.data.data
+					this.voices = res.data.data.voices
+					for (let i = 0; i < this.voices.length; i ++) {
+						// 处理标题
+						this.voices[i].voiceName = ((i + 1) + " ") + this.voices[i].voiceName
+						// 处理时长
+						this.voices[i].duration = parseInt(this.voices[i].duration / 60) + ":" + parseInt(this.voices[i].duration % 60)
+					}
+				}).catch(err=>{
+				    console.log(err)
+				})
+			},
+			loadTypeVoiceData() {
+				request("/voice/main/" + this.dataId,'GET').then(res=>{
+					console.log(res)
+					this.typeMain = res.data.data
+					this.voices = res.data.data.voices
+					for (let i = 0; i < this.voices.length; i ++) {
+						// 处理时长
+						this.voices[i].duration = parseInt(this.voices[i].duration / 60) + ":" + parseInt(this.voices[i].duration % 60)
+					}
+				}).catch(err=>{
+				    console.log(err)
+				})
+			}
+        },
+		onShow () {
+			this.isCourse = this.$route.query.isCourse === 'true'
+			this.dataId = this.$route.query.dataId
+			if (this.isCourse) {
+				this.loadCourseData()
+			} else {
+				this.loadTypeVoiceData()
+			}
+		}
     }
 </script>
 

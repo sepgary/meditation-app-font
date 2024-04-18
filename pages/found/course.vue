@@ -8,9 +8,7 @@
 		</uni-search-bar>
 		<uni-section v-for="(courseItem, index) in courseList" :title="courseItem.courseName" type="line" titleFontSize="large" titleColor="#5da981">
 			<template v-slot:right>
-				<navigator url="/pages/list/list?isCourse=true" hover-class="navigator-hover">
-					<text>全部 ></text>
-				</navigator>
+				<text @click="gotoMain(courseItem.id)">全部 ></text>
 			</template>
 			<view>
 				<scroll-view class="scroll-view_H" scroll-x="true" scroll-left="120" @touchmove.stop>
@@ -53,6 +51,11 @@
 				}).catch(err=>{
 				    console.log(err)
 				})
+			},
+			gotoMain(courseId) {
+				uni.navigateTo({
+					url: '../list/list?isCourse=true&dataId=' + courseId,
+				});
 			}
 		},
 		onShow() {
