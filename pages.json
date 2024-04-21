@@ -69,6 +69,13 @@
 				"navigationBarTitleText" : "用户编辑",
 				"enablePullDownRefresh" : false
 			}
+		},
+		{
+			"path": "pages/list/searchList",
+			"style": {
+				"navigationBarTitleText": "搜索列表",
+				"enablePullDownRefresh" : true
+			}
 		}
     ],
 	"globalStyle": {

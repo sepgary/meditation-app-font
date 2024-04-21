@@ -3,8 +3,7 @@
 		<view class="index-title">
 			<view class="text">练习计划</view>
 		</view>
-		<uni-search-bar @confirm="search" :focus="true" v-model="searchValue" @blur="blur" @focus="focus" @input="input"
-			@cancel="cancel" @clear="clear">
+		<uni-search-bar @confirm="search" :focus="true" v-model="searchValue">
 		</uni-search-bar>
 		<uni-section v-for="(courseItem, index) in courseList" :title="courseItem.courseName" type="line" titleFontSize="large" titleColor="#5da981">
 			<template v-slot:right>
@@ -13,7 +12,7 @@
 			<view>
 				<scroll-view class="scroll-view_H" scroll-x="true" scroll-left="120" @touchmove.stop>
 					<view v-for="(voiceItem, index) in courseItem.voices" class="scroll-view-item_H">
-						<image class="image" mode="scaleToFill" :src="voiceItem.picture" />
+						<image class="image" mode="scaleToFill" :src="voiceItem.picture" @click="gotoVoiceMain(voiceItem.id)" />
 						<view class="text">{{voiceItem.voiceName}}</view>
 					</view>
 				</scroll-view>
@@ -32,17 +31,8 @@
 			}
 		},
 		methods: {
-			search(res) {
-			},
-			input(res) {
-			},
-			clear(res) {
-			},
-			blur(res) {
-			},
-			focus(e) {
-			},
-			cancel(res) {
+			search() {
+				this.searchVoice();
 			},
 			loadCourseData() {
 				request("/course/list/5",'GET').then(res=>{
@@ -56,8 +46,18 @@
 				uni.navigateTo({
 					url: '../list/list?isCourse=true&dataId=' + courseId,
 				});
-			}
-		},
+			},
+			searchVoice() {
+				uni.navigateTo({
+					url: '../list/searchList?searchValue=' + this.searchValue,
+				});
+			},
+			gotoVoiceMain(voiceId) {
+				uni.navigateTo({
+					url: '../audio/audio?voiceId=' + voiceId,
+				});
+			},
+		}, 
 		onShow() {
 			this.loadCourseData()
 		}

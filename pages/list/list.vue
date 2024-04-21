@@ -9,8 +9,8 @@
 		</uni-card>
 		<uni-list>
 			<uni-list-item v-for="(item,index) in voices" :title="item.voiceName" showArrow
-				:thumb="item.picture"
-				thumb-size="lg" :rightText="item.duration" />
+				:thumb="item.picture" 
+				thumb-size="lg" :rightText="item.duration" link to="" @click="gotoVoiceMain(item.id)" />
 		</uni-list>
 	</view>
 </template>
@@ -55,7 +55,14 @@
 				}).catch(err=>{
 				    console.log(err)
 				})
-			}
+			},
+			gotoVoiceMain(voiceId) {
+				let i = 1
+				console.log(voiceId)
+				uni.navigateTo({
+					url: '../audio/audio?voiceId=' + voiceId,
+				});
+			},
         },
 		onShow () {
 			this.isCourse = this.$route.query.isCourse === 'true'
