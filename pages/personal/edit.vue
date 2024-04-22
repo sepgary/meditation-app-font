@@ -11,18 +11,20 @@
 				<uni-forms-item label="姓名" required>
 					<uni-easyinput v-model="baseFormData.name" placeholder="请输入姓名" />
 				</uni-forms-item>
+				<uni-forms-item label="年龄" required>
+					<uni-easyinput v-model="baseFormData.age" placeholder="请输入年龄" />
+				</uni-forms-item>
 				<uni-forms-item label="性别" required>
 					<uni-data-checkbox v-model="baseFormData.sex" :localdata="sexs" />
 				</uni-forms-item>
-				<uni-forms-item label="日期时间">
-					<uni-datetime-picker type="datetime" return-type="timestamp" v-model="baseFormData.datetimesingle"/>
-				</uni-forms-item>
+				<button type="primary" @click="edit()">取消收藏</button>
 			</uni-forms>
 		</view>
 	</view>
 </template>
 
 <script>
+	import request from '@/utils/request'
 	export default {
 		data() {
 			return {
@@ -31,7 +33,7 @@
 					id: 2132412,
 					name: '',
 					sex: 2,
-					datetimesingle: 1627529992399
+					age
 				},
 				// 单选数据源
 				sexs: [{
@@ -44,34 +46,16 @@
 			}
 		},
 		methods: {
-			onClickItem(e) {
-				console.log(e);
-				this.current = e.currentIndex
-			},
-			add() {
-				this.dynamicLists.push({
-					label: '域名',
-					rules: [{
-						'required': true,
-						errorMessage: '域名项必填'
-					}],
-					id: Date.now()
-				})
-			},
-			del(id) {
-				let index = this.dynamicLists.findIndex(v => v.id === id)
-				this.dynamicLists.splice(index, 1)
-			},
-			submit(ref) {
-				this.$refs[ref].validate().then(res => {
-					console.log('success', res);
-					uni.showToast({
-						title: `校验通过`
+			edit() {
+				request("/user/update", 'PUT', this.baseFormData, 1).then(res=>{
+					console.log(res)
+					uni.switchTab({
+						url: "/pages/personal/personal"
 					})
-				}).catch(err => {
-					console.log('err', err);
+				}).catch(err=>{
+					console.log(err)
 				})
-			},
+			}
 		}
 	}
 </script>
