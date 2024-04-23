@@ -47,8 +47,21 @@
 				this.voices = []
 				this.lodaVoiceList()
 			},
+			statistic() {
+				request("/user/event", 'POST', {
+					type: 'statistic',
+					key: 'STATISTIC_SEARCH',
+					value: '',
+					extra: ''
+				}, 1).then(res=>{
+					console.log(res)
+				}).catch(err=>{
+					console.log(err)
+				})
+			}
         },
 		onShow () {
+			this.statistic()
 			this.page = 1;
 			this.voices = []
 			this.searchValue = this.$route.query.searchValue

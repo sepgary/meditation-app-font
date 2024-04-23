@@ -57,8 +57,21 @@
 					url: '../audio/audio?voiceId=' + voiceId,
 				});
 			},
+			statistic() {
+				request("/user/event", 'POST', {
+					type: 'statistic',
+					key: 'STATISTIC_FOUND',
+					value: '',
+					extra: ''
+				}, 1).then(res=>{
+					console.log(res)
+				}).catch(err=>{
+					console.log(err)
+				})
+			}
 		},
 		onShow() {
+			this.statistic()
 			this.loadCourseData()
 		}
 	}

@@ -63,14 +63,28 @@
 					url: '../audio/audio?voiceId=' + voiceId,
 				});
 			},
+			statistic(keyValue) {
+				request("/user/event", 'POST', {
+					type: 'statistic',
+					key: keyValue,
+					value: '',
+					extra: ''
+				}, 1).then(res=>{
+					console.log(res)
+				}).catch(err=>{
+					console.log(err)
+				})
+			}
         },
 		onShow () {
 			this.isCourse = this.$route.query.isCourse === 'true'
 			this.dataId = this.$route.query.dataId
 			if (this.isCourse) {
 				this.loadCourseData()
+				this.statistic('STATISTIC_COURSE')
 			} else {
 				this.loadTypeVoiceData()
+				this.statistic('STATISTIC_VOICE')
 			}
 		}
     }

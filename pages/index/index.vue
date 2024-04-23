@@ -89,9 +89,22 @@
 				}).catch(err=>{
 					console.log(err)
 				})
+			},
+			statistic() {
+				request("/user/event", 'POST', {
+					type: 'statistic',
+					key: 'STATISTIC_INDEX',
+					value: '',
+					extra: ''
+				}, 1).then(res=>{
+					console.log(res)
+				}).catch(err=>{
+					console.log(err)
+				})
 			}
 		},
 		onShow() {
+			this.statistic()
 			this.loadIndexCourse()
 			this.loadRecommendVoiceList()
 		}

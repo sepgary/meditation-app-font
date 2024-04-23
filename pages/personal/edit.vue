@@ -6,18 +6,18 @@
 		<view class="example">
 			<uni-forms ref="baseForm" :modelValue="baseFormData">
 				<uni-forms-item label="ID" required>
-					<uni-easyinput disabled v-model="baseFormData.id" placeholder="请输入ID" />
+					<uni-easyinput disabled v-model="userId" placeholder="请输入ID" />
 				</uni-forms-item>
 				<uni-forms-item label="姓名" required>
 					<uni-easyinput v-model="baseFormData.name" placeholder="请输入姓名" />
 				</uni-forms-item>
 				<uni-forms-item label="年龄" required>
-					<uni-easyinput v-model="baseFormData.age" placeholder="请输入年龄" />
+					<uni-easyinput type="number" v-model="baseFormData.age" placeholder="请输入年龄" />
 				</uni-forms-item>
 				<uni-forms-item label="性别" required>
 					<uni-data-checkbox v-model="baseFormData.sex" :localdata="sexs" />
 				</uni-forms-item>
-				<button type="primary" @click="edit()">取消收藏</button>
+				<button type="primary" @click="edit()">保存</button>
 			</uni-forms>
 		</view>
 	</view>
@@ -30,24 +30,26 @@
 			return {
 				// 基础表单数据
 				baseFormData: {
-					id: 2132412,
 					name: '',
 					sex: 2,
-					age
+					age: 0
 				},
 				// 单选数据源
 				sexs: [{
 					text: '男',
-					value: 0
+					value: 1
 				}, {
 					text: '女',
-					value: 1
+					value: 2
 				}],
+				userId: 0
 			}
 		},
 		methods: {
 			edit() {
-				request("/user/update", 'PUT', this.baseFormData, 1).then(res=>{
+				console.log(this.baseFormData)
+				this.baseFormData.age = parseInt(this.baseFormData.age)
+				request("/user/update", 'PUT', JSON.stringify(this.baseFormData), 1).then(res=>{
 					console.log(res)
 					uni.switchTab({
 						url: "/pages/personal/personal"
@@ -55,7 +57,21 @@
 				}).catch(err=>{
 					console.log(err)
 				})
+			},
+			loadUserInfo() {
+				request("/user/get", 'GET').then(res=>{
+					console.log(res)
+					this.userId = res.data.data.id
+					this.baseFormData.name = res.data.data.name
+					this.baseFormData.sex = res.data.data.sex
+					this.baseFormData.age = res.data.data.age
+				}).catch(err=>{
+					console.log(err)
+				})
 			}
+		},
+		onShow() {
+			this.loadUserInfo()
 		}
 	}
 </script>

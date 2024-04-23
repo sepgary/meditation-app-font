@@ -69,12 +69,25 @@
 				}).catch(err=>{
 					console.log(err)
 				})
+			},
+			statistic() {
+				request("/user/event", 'POST', {
+					type: 'statistic',
+					key: 'STATISTIC_AUDIO',
+					value: '',
+					extra: ''
+				}, 1).then(res=>{
+					console.log(res)
+				}).catch(err=>{
+					console.log(err)
+				})
 			}
 		},
 		created() {
 			this.playTime = 0
 			this.startTime = 0
 			this.loadVoice()
+			this.statistic()
 		}
 	}
 </script>
