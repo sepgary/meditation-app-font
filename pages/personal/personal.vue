@@ -50,7 +50,7 @@
 	<view>
 		<uni-list>
 			<navigator url="/pages/personal/record" hover-class="navigator-hover">
-				<uni-list-item title="最近一次播放" showArrow
+				<uni-list-item title="最近播放" showArrow
 					thumb="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
 					thumb-size="lg" />
 			</navigator>
